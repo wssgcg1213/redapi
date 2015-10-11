@@ -1,0 +1,24 @@
+{
+  "name": "redapi",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.0.0",
+    "cookie-parser": "^1.0.1",
+    "debug": "~0.7.4",
+    "ejs": "~0.8.5",
+    "express": "~4.2.0",
+    "iconv": "^2.1.4",
+    "jQuery": "^1.7.4",
+    "jsdom": "^0.11.1",
+    "mongoose": "^3.8.16",
+    "morgan": "~1.0.0",
+    "socket.io": "~0.9",
+    "static-favicon": "~1.0.0",
+    "xml2js": "^0.4.4",
+    "xmlhttprequest": "^1.6.0"
+  }
+}

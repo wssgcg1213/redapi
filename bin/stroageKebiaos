@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+var settings = require('../settings');
+var mongoose = require('mongoose');
+mongoose.connect(settings.db);
+
+var kebiaoModel = require('../models/kebiaoModel');
+var kebiaoPlugin = require('../plugins/kebiao');
+
+var options = {
+    expire: 30 * 24 * 3600 * 1000
+};
+
+item(2011210001, 2011214928);
+item(2012210001, 2012217193);
+item(2013210001, 2013214501);
+item(2014210001, 2014214570);
+
+
+function item(n, end){
+    if(n == end + 1){
+        return console.log('ALL DOME!');
+    }
+
+    kebiaoPlugin.rawCall(n, undefined, function(err, obj){
+        if(err) return console.log(err);
+        obj.cachedTimestamp = new Date().getTime();
+        obj.outOfDateTimestamp = obj.cachedTimestamp + options.expire;
+        var k = new kebiaoModel(obj)
+        k.save(function(err){
+            if(err) return console.log(err);
+            console.log('Saved in mongodb', obj.stuNum);
+            item(n + 1, end);
+        });
+    });
+}
+
+//kebiaoModel.find({}, function(err, _kb){
+//
+//    console.log(_kb[0].data);
+//});

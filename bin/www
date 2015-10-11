@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+var debug = require('debug')('redapi');
+var app = require('../redapi');
+
+app.set('port', process.env.PORT || 3000);
+
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server, {'log level': 2});
+
+
+io.on('connection', function (socket) {
+    var hostId = '', browserId = '';
+    socket.on('set-host', function(id){
+        hostId = id || socket.store.id;
+//        console.log('set-host-id:', hostId);
+    });
+    socket.on('set-browser', function(id){
+        browserId = id || socket.store.id;
+//        console.log('set-browserId-id:', browserId);
+    });
+    socket.on('fetch', function(data){
+//        console.log('fetch', data);
+        socket.broadcast.emit('fetch-from-browser', data);
+    });
+    socket.on('gotQuery', function(data){
+        socket.broadcast.emit('gotQuery', data);
+        console.log('got', data);
+    });
+});
+
+server.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
